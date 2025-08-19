@@ -39,6 +39,7 @@ dependencies:
   dio: ^5.9.0
   flutter_dotenv: ^5.2.1
   logger: ^2.6.1
+  nested: ^1.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,6 @@
 import 'package:chemical_compounds/core/constants/app_endpoints.dart';
+import 'package:chemical_compounds/core/network/dio_provider.dart';
+import 'package:chemical_compounds/features/home/data/models/properties_model.dart';
 import 'package:dio/dio.dart';
 
 class HomeRemoteDataSource {
@@ -6,16 +8,22 @@ class HomeRemoteDataSource {
 
   HomeRemoteDataSource(this.dio);
 
-  Future<void> fetchItems() async {
+  Future<List<Property>> fetchItems({
+    required String compoundName,
+    required String properties,
+  }) async {
     String endPoint = API.details(
-      'Aspirin',
+      compoundName: compoundName,
+      properties: properties,
     ); // Example endpoint, replace with actual endpoint if needed
 
-    final Response response = await dio.get(endPoint);
+    final Response<Map<String, dynamic>> response = await DioProvider.httpDio
+        .get(endPoint);
     if (response.statusCode == 200) {
-      //ToDo: Handle the response data
-      print(response.data);
-      return;
+      final PropertiesModel propertiesModel = PropertiesModel.fromJson(
+        response.data ?? <String, dynamic>{},
+      );
+      return propertiesModel.propertyTable?.properties ?? <Property>[];
     } else {
       throw Exception('Failed to load items');
     }
