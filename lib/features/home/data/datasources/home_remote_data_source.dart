@@ -11,7 +11,7 @@ class HomeRemoteDataSource {
       'Aspirin',
     ); // Example endpoint, replace with actual endpoint if needed
 
-    final response = await dio.get(endPoint);
+    final Response response = await dio.get(endPoint);
     if (response.statusCode == 200) {
       //ToDo: Handle the response data
       print(response.data);
