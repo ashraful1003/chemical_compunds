@@ -50,6 +50,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           compoundName: event.compoundName,
         );
         emit(CIDApiLoaded(result));
+        if (result.isNotEmpty) {
+          add(FetchCompoundEvent(cids: result[0].toString()));
+        }
       } catch (e) {
         emit(CIDApiError(e.toString()));
       }
