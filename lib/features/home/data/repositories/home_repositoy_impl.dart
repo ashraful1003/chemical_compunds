@@ -13,4 +13,12 @@ class HomeRepository {
       properties: AppStrings.properties,
     );
   }
+
+  Future<List<int>> getCID({required String compoundName}) async {
+    return await _remoteDataSource.getCID(compoundName: compoundName);
+  }
+
+  Future<List<String>> searchCompound({required String query}) async {
+    return await _remoteDataSource.searchCompound(query: query);
+  }
 }
