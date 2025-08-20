@@ -1,3 +1,4 @@
+import 'package:chemical_compounds/features/details/presentation/pages/details_page.dart';
 import 'package:chemical_compounds/features/home/data/models/properties_model.dart';
 import 'package:chemical_compounds/features/home/data/repositories/home_repositoy_impl.dart';
 import 'package:chemical_compounds/features/home/presentation/bloc/home_bloc.dart';
@@ -31,6 +32,14 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final Property item = state.items[index];
                   return ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (_) => DetailsPage(cid: item.cid ?? 0),
+                        ),
+                      );
+                    },
                     title: Text(item.molecularFormula ?? ''),
                     subtitle: Text('ID: ${item.molecularWeight ?? ''}'),
                   );
