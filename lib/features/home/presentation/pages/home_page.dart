@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //fetch compound from shared preferences
-  final String compoundName = '2244';
+  final List<int> compoundNames = <int>[2244, 180];
 
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider<HomeBloc>(
       create: (BuildContext context) =>
           HomeBloc(context.read<HomeRepository>())
-            ..add(FetchCompoundEvent(cids: compoundName)),
+            ..add(FetchCompoundEvent(cids: compoundNames.join(','))),
       child: Builder(
         builder: (BuildContext buildContext) {
           return Scaffold(
