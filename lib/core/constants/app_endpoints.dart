@@ -16,5 +16,5 @@ class API {
   static String description({required int cid}) =>
       '/$compound/cid/$cid/description/JSON';
 
-  static String image({required int cid}) => '/$compound/cid/$cid/PNG';
+  static String image({required int cid}) => '$compound/cid/$cid/PNG';
 }
