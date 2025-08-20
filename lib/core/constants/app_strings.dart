@@ -8,4 +8,6 @@ class AppStrings {
   AppStrings._internal();
 
   static const String properties = 'MolecularFormula,MolecularWeight,IUPACName';
+  static const String cid = "cid";
+  static const String iupacName = "iupacName";
 }

@@ -2,7 +2,7 @@ import 'package:chemical_compounds/features/details/data/datasources/details_rem
 import 'package:chemical_compounds/features/details/data/repositories/details_repository_impl.dart';
 import 'package:chemical_compounds/features/home/data/datasources/home_remote_data_source.dart';
 import 'package:chemical_compounds/features/home/data/repositories/home_repositoy_impl.dart';
-import 'package:chemical_compounds/features/home/presentation/pages/home_page.dart';
+import 'package:chemical_compounds/routes/app_router.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,10 +37,10 @@ class App extends StatelessWidget {
               DetailsRepository(context.read<DetailsRemoteDataSource>()),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Chemical Compounds',
-        home: const HomePage(),
+        routerConfig: appRouter,
       ),
     );
   }

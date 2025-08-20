@@ -18,7 +18,7 @@ class DetailsPage extends StatelessWidget {
           DetailsBloc(context.read<DetailsRepository>())
             ..add(FetchDetailsEvent(cid)),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Compound Details')),
+        appBar: AppBar(title: Text('IUPACName: $iupacName')),
         body: BlocBuilder<DetailsBloc, DetailsState>(
           builder: (BuildContext context, DetailsState state) {
             if (state is DetailLoading) {
