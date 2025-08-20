@@ -9,11 +9,11 @@ class HomeRemoteDataSource {
   HomeRemoteDataSource(this.dio);
 
   Future<List<Property>> fetchItems({
-    required String compoundName,
+    required String cids,
     required String properties,
   }) async {
     String endPoint = API.details(
-      compoundName: compoundName,
+      cids: cids,
       properties: properties,
     ); // Example endpoint, replace with actual endpoint if needed
 

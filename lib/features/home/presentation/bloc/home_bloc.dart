@@ -12,8 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeLoading());
       try {
         final List<Property> items = await repository.getItems(
-          compoundName: event.compoundName,
-          properties: event.properties,
+          cids: event.cids,
         );
         emit(HomeLoaded(items));
       } catch (e) {

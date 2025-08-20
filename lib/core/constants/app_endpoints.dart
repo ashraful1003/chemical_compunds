@@ -1,8 +1,6 @@
 class API {
-  static String details({
-    required String compoundName,
-    required String properties,
-  }) => '/name/$compoundName/property/$properties/JSON';
+  static String details({required String cids, required String properties}) =>
+      '/cid/$cids/property/$properties/JSON';
 
   static String synonyms({required int cid}) => '/cid/$cid/synonyms/JSON';
 

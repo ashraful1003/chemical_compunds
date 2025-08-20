@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetailsPage extends StatelessWidget {
-  const DetailsPage({required this.cid, super.key});
+  const DetailsPage({required this.cid, required this.iupacName, super.key});
 
   final int cid;
+  final String iupacName;
 
   @override
   Widget build(BuildContext context) {

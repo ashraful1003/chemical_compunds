@@ -1,0 +1,11 @@
+class AppStrings {
+  static final AppStrings _instance = AppStrings._internal();
+
+  factory AppStrings() {
+    return _instance;
+  }
+
+  AppStrings._internal();
+
+  static const String properties = 'MolecularFormula,MolecularWeight,IUPACName';
+}
