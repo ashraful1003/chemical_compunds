@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
               return ListView.builder(
                 itemCount: state.items.length,
                 //todo: initially shows from shared preferences
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   return CompoundItem(compound: state.items[index]);
                 },
               );

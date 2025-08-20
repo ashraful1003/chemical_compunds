@@ -38,7 +38,7 @@ class SearchApiLoaded extends HomeState {
   SearchApiLoaded(this.result);
 
   @override
-  List<Object?> get props => [result];
+  List<Object?> get props => <Object?>[result];
 }
 
 class SearchApiError extends HomeState {
@@ -47,7 +47,7 @@ class SearchApiError extends HomeState {
   SearchApiError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => <Object?>[message];
 }
 
 // cid api states
@@ -59,7 +59,7 @@ class CIDApiLoaded extends HomeState {
   CIDApiLoaded(this.result);
 
   @override
-  List<Object?> get props => [result];
+  List<Object?> get props => <Object?>[result];
 }
 
 class CIDApiError extends HomeState {
@@ -68,5 +68,5 @@ class CIDApiError extends HomeState {
   CIDApiError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => <Object?>[message];
 }

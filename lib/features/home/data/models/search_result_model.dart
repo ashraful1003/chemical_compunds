@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class SearchResultModel extends Equatable {
-  SearchResultModel({required this.identifierList});
+  const SearchResultModel({required this.identifierList});
 
   final IdentifierList? identifierList;
 
@@ -13,27 +13,31 @@ class SearchResultModel extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => {"IdentifierList": identifierList?.toJson()};
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    "IdentifierList": identifierList?.toJson(),
+  };
 
   @override
-  List<Object?> get props => [identifierList];
+  List<Object?> get props => <Object?>[identifierList];
 }
 
 class IdentifierList extends Equatable {
-  IdentifierList({required this.cid});
+  const IdentifierList({required this.cid});
 
   final List<int> cid;
 
   factory IdentifierList.fromJson(Map<String, dynamic> json) {
     return IdentifierList(
       cid: json["CID"] == null
-          ? []
+          ? <int>[]
           : List<int>.from(json["CID"]!.map((x) => x)),
     );
   }
 
-  Map<String, dynamic> toJson() => {"CID": cid.map((x) => x).toList()};
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    "CID": cid.map((int x) => x).toList(),
+  };
 
   @override
-  List<Object?> get props => [cid];
+  List<Object?> get props => <Object?>[cid];
 }

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class CompoundAutocompleteModel extends Equatable {
-  CompoundAutocompleteModel({
+  const CompoundAutocompleteModel({
     required this.status,
     required this.total,
     required this.dictionaryTerms,
@@ -21,39 +21,39 @@ class CompoundAutocompleteModel extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => <String, dynamic>{
     "status": status?.toJson(),
     "total": total,
     "dictionary_terms": dictionaryTerms?.toJson(),
   };
 
   @override
-  List<Object?> get props => [status, total, dictionaryTerms];
+  List<Object?> get props => <Object?>[status, total, dictionaryTerms];
 }
 
 class DictionaryTerms extends Equatable {
-  DictionaryTerms({required this.compound});
+  const DictionaryTerms({required this.compound});
 
   final List<String> compound;
 
   factory DictionaryTerms.fromJson(Map<String, dynamic> json) {
     return DictionaryTerms(
       compound: json["compound"] == null
-          ? []
+          ? <String>[]
           : List<String>.from(json["compound"]!.map((x) => x)),
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "compound": compound.map((x) => x).toList(),
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    "compound": compound.map((String x) => x).toList(),
   };
 
   @override
-  List<Object?> get props => [compound];
+  List<Object?> get props => <Object?>[compound];
 }
 
 class Status extends Equatable {
-  Status({required this.code});
+  const Status({required this.code});
 
   final int? code;
 
@@ -61,8 +61,8 @@ class Status extends Equatable {
     return Status(code: json["code"]);
   }
 
-  Map<String, dynamic> toJson() => {"code": code};
+  Map<String, dynamic> toJson() => <String, dynamic>{"code": code};
 
   @override
-  List<Object?> get props => [code];
+  List<Object?> get props => <Object?>[code];
 }

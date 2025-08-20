@@ -24,10 +24,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
 
     // New event handler for search API call.
-    on<FetchSearchApiEvent>((event, emit) async {
+    on<FetchSearchApiEvent>((
+      FetchSearchApiEvent event,
+      Emitter<HomeState> emit,
+    ) async {
       emit(SearchApiLoading());
       try {
-        final result = await repository.searchCompound(query: event.query);
+        final List<String> result = await repository.searchCompound(
+          query: event.query,
+        );
         emit(SearchApiLoaded(result));
       } catch (e) {
         emit(SearchApiError(e.toString()));
@@ -35,10 +40,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
 
     // New event handler for button API call.
-    on<FetchCIDApiEvent>((event, emit) async {
+    on<FetchCIDApiEvent>((
+      FetchCIDApiEvent event,
+      Emitter<HomeState> emit,
+    ) async {
       emit(CIDApiLoading());
       try {
-        final result = await repository.getCID(
+        final List<int> result = await repository.getCID(
           compoundName: event.compoundName,
         );
         emit(CIDApiLoaded(result));
