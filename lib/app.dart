@@ -1,3 +1,5 @@
+import 'package:chemical_compounds/features/details/data/datasources/details_remote_data_source.dart';
+import 'package:chemical_compounds/features/details/data/repositories/details_repository_impl.dart';
 import 'package:chemical_compounds/features/home/data/datasources/home_remote_data_source.dart';
 import 'package:chemical_compounds/features/home/data/repositories/home_repositoy_impl.dart';
 import 'package:chemical_compounds/features/home/presentation/pages/home_page.dart';
@@ -14,13 +16,25 @@ class App extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: <SingleChildWidget>[
         RepositoryProvider<Dio>(create: (_) => Dio()),
+
+        /// Data Sources
         RepositoryProvider<HomeRemoteDataSource>(
           create: (BuildContext context) =>
               HomeRemoteDataSource(context.read<Dio>()),
         ),
+        RepositoryProvider<DetailsRemoteDataSource>(
+          create: (BuildContext context) =>
+              DetailsRemoteDataSource(context.read<Dio>()),
+        ),
+
+        /// Repositories
         RepositoryProvider<HomeRepository>(
           create: (BuildContext context) =>
               HomeRepository(context.read<HomeRemoteDataSource>()),
+        ),
+        RepositoryProvider<DetailsRepository>(
+          create: (BuildContext context) =>
+              DetailsRepository(context.read<DetailsRemoteDataSource>()),
         ),
       ],
       child: MaterialApp(
