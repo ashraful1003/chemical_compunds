@@ -8,7 +8,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository repository;
 
   HomeBloc(this.repository) : super(HomeInitial()) {
-    on<FetchItemsEvent>((FetchItemsEvent event, Emitter<HomeState> emit) async {
+    on<FetchCompoundEvent>((
+      FetchCompoundEvent event,
+      Emitter<HomeState> emit,
+    ) async {
       emit(HomeLoading());
       try {
         final List<Property> items = await repository.getItems(
@@ -17,6 +20,30 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(HomeLoaded(items));
       } catch (e) {
         emit(HomeError(e.toString()));
+      }
+    });
+
+    // New event handler for search API call.
+    on<FetchSearchApiEvent>((event, emit) async {
+      emit(SearchApiLoading());
+      try {
+        final result = await repository.searchCompound(query: event.query);
+        emit(SearchApiLoaded(result));
+      } catch (e) {
+        emit(SearchApiError(e.toString()));
+      }
+    });
+
+    // New event handler for button API call.
+    on<FetchCIDApiEvent>((event, emit) async {
+      emit(CIDApiLoading());
+      try {
+        final result = await repository.getCID(
+          compoundName: event.compoundName,
+        );
+        emit(CIDApiLoaded(result));
+      } catch (e) {
+        emit(CIDApiError(e.toString()));
       }
     });
   }

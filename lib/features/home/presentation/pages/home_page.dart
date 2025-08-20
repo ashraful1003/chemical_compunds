@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
     return BlocProvider<HomeBloc>(
       create: (BuildContext context) =>
           HomeBloc(context.read<HomeRepository>())
-            ..add(FetchItemsEvent(cids: compoundName)),
+            ..add(FetchCompoundEvent(cids: compoundName)),
       child: Scaffold(
         appBar: AppBar(title: const Text('Home')),
         body: BlocBuilder<HomeBloc, HomeState>(
