@@ -1,25 +1,23 @@
-import 'package:chemical_compounds/features/details/presentation/pages/details_page.dart';
-import 'package:chemical_compounds/features/home/data/models/properties_model.dart';
 import 'package:chemical_compounds/features/home/data/repositories/home_repositoy_impl.dart';
 import 'package:chemical_compounds/features/home/presentation/bloc/home_bloc.dart';
 import 'package:chemical_compounds/features/home/presentation/bloc/home_event.dart';
 import 'package:chemical_compounds/features/home/presentation/bloc/home_state.dart';
+import 'package:chemical_compounds/features/home/presentation/pages/widgets/compound_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  //fetch compound from shared preferences
   final String compoundName = 'aspirin';
-  final String properties = 'MolecularFormula,MolecularWeight';
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HomeBloc>(
-      create: (BuildContext context) => HomeBloc(context.read<HomeRepository>())
-        ..add(
-          FetchItemsEvent(compoundName: compoundName, properties: properties),
-        ),
+      create: (BuildContext context) =>
+          HomeBloc(context.read<HomeRepository>())
+            ..add(FetchItemsEvent(cids: compoundName)),
       child: Scaffold(
         appBar: AppBar(title: const Text('Home')),
         body: BlocBuilder<HomeBloc, HomeState>(
@@ -29,20 +27,9 @@ class HomePage extends StatelessWidget {
             } else if (state is HomeLoaded) {
               return ListView.builder(
                 itemCount: state.items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Property item = state.items[index];
-                  return ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (_) => DetailsPage(cid: item.cid ?? 0),
-                        ),
-                      );
-                    },
-                    title: Text(item.molecularFormula ?? ''),
-                    subtitle: Text('ID: ${item.molecularWeight ?? ''}'),
-                  );
+                //todo: initially shows from shared preferences
+                itemBuilder: (context, index) {
+                  return CompoundItem(compound: state.items[index]);
                 },
               );
             } else if (state is HomeError) {
