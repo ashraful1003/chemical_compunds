@@ -8,23 +8,24 @@ class NormalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.all(12.0),
-        child: Text.rich(
-          TextSpan(
-            children: <InlineSpan>[
-              TextSpan(
-                text: title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextSpan(text: description, style: const TextStyle(fontSize: 14)),
-            ],
-          ),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8.0),
+        color: Color(0xFFEA5B6F),
+      ),
+      child: Text.rich(
+        TextSpan(
+          style: TextStyle(color: Colors.white, fontSize: 14),
+          children: <InlineSpan>[
+            TextSpan(
+              text: title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: description),
+          ],
         ),
       ),
     );
