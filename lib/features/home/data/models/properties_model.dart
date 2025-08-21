@@ -58,6 +58,15 @@ class Property extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      "CID": cid,
+      "MolecularFormula": molecularFormula,
+      "MolecularWeight": molecularWeight,
+      "IUPACName": iupacName,
+    };
+  }
+
   @override
   List<Object?> get props => <Object?>[
     cid,
