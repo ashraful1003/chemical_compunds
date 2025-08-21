@@ -27,7 +27,13 @@ class DetailsPage extends StatelessWidget {
           DetailsBloc(context.read<DetailsRepository>())
             ..add(FetchDetailsEvent(cid)),
       child: Scaffold(
-        appBar: AppBar(title: Text('Details Page')),
+        appBar: AppBar(
+          title: Text(
+            'Details Page',
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Color(0xFFFFCB61),
+        ),
         body: BlocBuilder<DetailsBloc, DetailsState>(
           builder: (BuildContext context, DetailsState state) {
             if (state is DetailLoading) {

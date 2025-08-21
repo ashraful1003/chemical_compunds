@@ -103,27 +103,37 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Home'),
+      title: const Text(
+        'Home',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: Color(0xFFFFCB61),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: TextFormField(
             controller: _searchController,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ), // Set your desired color here
             decoration: InputDecoration(
               hintText: 'Enter compound name...',
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search, color: Colors.white),
               suffixIcon: _searchController.text.isNotEmpty
                   ? BlocBuilder<HomeBloc, HomeState>(
                       builder: (BuildContext context, HomeState state) {
                         if (state.isCompoundLoading) {
                           return Container(
                             margin: EdgeInsets.only(right: 10),
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                           );
                         } else {
                           return IconButton(
-                            icon: const Icon(Icons.close),
+                            icon: const Icon(Icons.close, color: Colors.white),
                             onPressed: () {
                               _searchController.clear();
                               setState(() {}); // update UI to hide suggestions
@@ -134,13 +144,22 @@ class _HomePageState extends State<HomePage> {
                     )
                   : null,
               suffixIconConstraints: const BoxConstraints(
-                minWidth: 15,
-                minHeight: 15,
+                minWidth: 12,
+                minHeight: 12,
               ),
-
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
+                borderSide: BorderSide(color: Colors.white, width: 2),
               ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+                borderSide: BorderSide(color: Colors.white, width: 2),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+                borderSide: BorderSide(color: Colors.white, width: 2),
+              ),
+
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
                 vertical: 8,
@@ -161,51 +180,56 @@ class _HomePageState extends State<HomePage> {
     if (_searchController.text.isEmpty) {
       return const SizedBox.shrink();
     }
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (BuildContext context, HomeState state) {
-        if (state.isSearchLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.error != null) {
-          return Center(child: Text(state.error ?? ''));
-        } else if (state.searchResults.isNotEmpty) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 6,
-              runSpacing: 6,
-              children: state.searchResults.map((String keyword) {
-                return GestureDetector(
-                  onTap: () {
-                    _getCompoundCIDByName(context, keyword);
-                    setState(
-                      () {},
-                    ); // Refresh UI to hide suggestions if needed.
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade100,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      keyword,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
+    return Column(
+      children: <Widget>[
+        SizedBox(height: 10),
+        BlocBuilder<HomeBloc, HomeState>(
+          builder: (BuildContext context, HomeState state) {
+            if (state.isSearchLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state.error != null) {
+              return Center(child: Text(state.error ?? ''));
+            } else if (state.searchResults.isNotEmpty) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: state.searchResults.map((String keyword) {
+                    return GestureDetector(
+                      onTap: () {
+                        _getCompoundCIDByName(context, keyword);
+                        setState(
+                          () {},
+                        ); // Refresh UI to hide suggestions if needed.
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFF894F),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          keyword,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
+                    );
+                  }).toList(),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ],
     );
   }
 }
