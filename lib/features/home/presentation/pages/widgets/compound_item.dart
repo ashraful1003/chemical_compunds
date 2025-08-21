@@ -26,7 +26,7 @@ class CompoundItem extends StatelessWidget {
         elevation: 2.0,
         child: ListTile(
           title: Text(
-            'compound.commonName',
+            compound.compoundName ?? '',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Column(

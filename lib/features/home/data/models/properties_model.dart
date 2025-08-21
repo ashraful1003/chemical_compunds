@@ -42,9 +42,11 @@ class Property extends Equatable {
     required this.molecularFormula,
     required this.molecularWeight,
     required this.iupacName,
+    this.compoundName,
   });
 
   final int? cid;
+  final String? compoundName;
   final String? molecularFormula;
   final String? molecularWeight;
   final String? iupacName;
@@ -52,6 +54,7 @@ class Property extends Equatable {
   factory Property.fromJson(Map<String, dynamic> json) {
     return Property(
       cid: json["CID"],
+      compoundName: json["CompoundName"] ?? '',
       molecularFormula: json["MolecularFormula"],
       molecularWeight: json["MolecularWeight"],
       iupacName: json["IUPACName"],
@@ -61,10 +64,27 @@ class Property extends Equatable {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       "CID": cid,
+      "CompoundName": compoundName ?? '',
       "MolecularFormula": molecularFormula,
       "MolecularWeight": molecularWeight,
       "IUPACName": iupacName,
     };
+  }
+
+  Property copyWith({
+    int? cid,
+    String? compoundName,
+    String? molecularFormula,
+    String? molecularWeight,
+    String? iupacName,
+  }) {
+    return Property(
+      cid: cid ?? this.cid,
+      compoundName: compoundName ?? this.compoundName,
+      molecularFormula: molecularFormula ?? this.molecularFormula,
+      molecularWeight: molecularWeight ?? this.molecularWeight,
+      iupacName: iupacName ?? this.iupacName,
+    );
   }
 
   @override
