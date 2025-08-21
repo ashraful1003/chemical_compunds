@@ -7,8 +7,9 @@ abstract class HomeEvent extends Equatable {
 
 class FetchCompoundEvent extends HomeEvent {
   final String cids;
+  final String compoundName;
 
-  FetchCompoundEvent({required this.cids});
+  FetchCompoundEvent({required this.cids, required this.compoundName});
 
   @override
   List<Object?> get props => <Object?>[cids];

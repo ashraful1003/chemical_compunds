@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _debounce?.cancel();
-    _searchController.dispose();
+    _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider<HomeBloc>(
       create: (BuildContext context) =>
           HomeBloc(context.read<HomeRepository>())
-            ..add(FetchCompoundEvent(cids: '')),
+            ..add(FetchCompoundEvent(cids: '', compoundName: '')),
       child: Builder(
         builder: (BuildContext buildContext) {
           return Scaffold(
@@ -77,29 +77,26 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCompoundList() {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (BuildContext context, HomeState state) {
-        if (state is HomeLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is HomeLoaded) {
-          return state.items.isEmpty
-              ? const Center(
-                  child: Text(
-                    'No compounds found. Search for a compound name.',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: state.items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CompoundItem(compound: state.items[index]);
-                  },
-                );
-        } else if (state is HomeError) {
-          return Center(child: Text(state.message));
+        if (state.error != null) {
+          return Center(child: Text(state.error ?? ''));
+        } else if (state.compounds.isEmpty) {
+          return const Center(
+            child: Text(
+              'No compounds found. Search for a compound name.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            ),
+          );
+        } else {
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.compounds.length,
+            itemBuilder: (BuildContext context, int index) {
+              return CompoundItem(compound: state.compounds[index]);
+            },
+          );
         }
-        // Initial state
-        return const SizedBox.shrink();
       },
     );
   }
@@ -117,14 +114,30 @@ class _HomePageState extends State<HomePage> {
               hintText: 'Enter compound name...',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {}); // update UI to hide suggestions
+                  ? BlocBuilder<HomeBloc, HomeState>(
+                      builder: (BuildContext context, HomeState state) {
+                        if (state.isCompoundLoading) {
+                          return Container(
+                            margin: EdgeInsets.only(right: 10),
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          return IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() {}); // update UI to hide suggestions
+                            },
+                          );
+                        }
                       },
                     )
                   : null,
+              suffixIconConstraints: const BoxConstraints(
+                minWidth: 15,
+                minHeight: 15,
+              ),
+
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
               ),
@@ -149,21 +162,19 @@ class _HomePageState extends State<HomePage> {
       return const SizedBox.shrink();
     }
     return BlocBuilder<HomeBloc, HomeState>(
-      buildWhen: (HomeState previous, HomeState current) =>
-          current is SearchApiLoading ||
-          current is SearchApiLoaded ||
-          current is SearchApiError,
       builder: (BuildContext context, HomeState state) {
-        if (state is SearchApiLoading) {
+        if (state.isSearchLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is SearchApiLoaded) {
+        } else if (state.error != null) {
+          return Center(child: Text(state.error ?? ''));
+        } else if (state.searchResults.isNotEmpty) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 6),
             child: Wrap(
               alignment: WrapAlignment.center,
               spacing: 6,
               runSpacing: 6,
-              children: state.result.map((String keyword) {
+              children: state.searchResults.map((String keyword) {
                 return GestureDetector(
                   onTap: () {
                     _getCompoundCIDByName(context, keyword);
@@ -173,17 +184,17 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
+                      horizontal: 6,
+                      vertical: 4,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade100,
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       keyword,
                       style: const TextStyle(
-                        fontSize: 17,
+                        fontSize: 16,
                         color: Colors.black87,
                       ),
                     ),
@@ -192,8 +203,6 @@ class _HomePageState extends State<HomePage> {
               }).toList(),
             ),
           );
-        } else if (state is SearchApiError) {
-          return Center(child: Text(state.message));
         }
         return const SizedBox.shrink();
       },

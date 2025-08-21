@@ -11,7 +11,10 @@ class HomeRepository {
 
   HomeRepository(this._remoteDataSource);
 
-  Future<List<Property>> getItems({String cids = ''}) async {
+  Future<List<Property>> getItems({
+    required String cids,
+    required String compoundName,
+  }) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? cachedJson = prefs.getString(AppStrings.cacheKey);
 
@@ -47,6 +50,7 @@ class HomeRepository {
         }
 
         property = fetched.first;
+        property = property.copyWith(compoundName: compoundName);
         properties.insert(0, property);
 
         // Save updated list to cache
