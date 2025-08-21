@@ -16,15 +16,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //fetch compound from shared preferences
-  final List<int> compoundNames = <int>[2244, 180];
-
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
 
   @override
   void dispose() {
     _debounce?.cancel();
+    _searchController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -49,43 +48,21 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider<HomeBloc>(
       create: (BuildContext context) =>
           HomeBloc(context.read<HomeRepository>())
-            ..add(FetchCompoundEvent(cids: compoundNames.join(','))),
+            ..add(FetchCompoundEvent(cids: '')),
       child: Builder(
         builder: (BuildContext buildContext) {
           return Scaffold(
             appBar: _buildAppBar(buildContext),
             body: CustomScrollView(
               shrinkWrap: true,
+              controller: _scrollController,
               slivers: <Widget>[
                 SliverToBoxAdapter(
                   child: Column(
                     children: <Widget>[
                       _buildSuggestedKeyword(),
                       SizedBox(height: 10),
-                      BlocBuilder<HomeBloc, HomeState>(
-                        builder: (BuildContext context, HomeState state) {
-                          if (state is HomeLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (state is HomeLoaded) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: state.items.length,
-                              //todo: initially shows from shared preferences
-                              itemBuilder: (BuildContext context, int index) {
-                                return CompoundItem(
-                                  compound: state.items[index],
-                                );
-                              },
-                            );
-                          } else if (state is HomeError) {
-                            return Center(child: Text(state.message));
-                          }
-                          // Initial state
-                          return const SizedBox.shrink();
-                        },
-                      ),
+                      _buildCompoundList(),
                     ],
                   ),
                 ),
@@ -94,6 +71,36 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildCompoundList() {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (BuildContext context, HomeState state) {
+        if (state is HomeLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is HomeLoaded) {
+          return state.items.isEmpty
+              ? const Center(
+                  child: Text(
+                    'No compounds found. Search for a compound name.',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CompoundItem(compound: state.items[index]);
+                  },
+                );
+        } else if (state is HomeError) {
+          return Center(child: Text(state.message));
+        }
+        // Initial state
+        return const SizedBox.shrink();
+      },
     );
   }
 
@@ -107,7 +114,6 @@ class _HomePageState extends State<HomePage> {
           child: TextFormField(
             controller: _searchController,
             decoration: InputDecoration(
-              labelText: 'Search Compound',
               hintText: 'Enter compound name...',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: _searchController.text.isNotEmpty
