@@ -120,6 +120,7 @@ class _HomePageState extends State<HomePage> {
             ), // Set your desired color here
             decoration: InputDecoration(
               hintText: 'Enter compound name...',
+              hintStyle: TextStyle(fontSize: 16, color: Colors.white70),
               prefixIcon: const Icon(Icons.search, color: Colors.white),
               suffixIcon: _searchController.text.isNotEmpty
                   ? BlocBuilder<HomeBloc, HomeState>(
